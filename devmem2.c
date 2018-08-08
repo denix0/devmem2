@@ -53,8 +53,6 @@
 #define FATAL do { fprintf(stderr, "Error at line %d, file %s (%d) [%s]\n", \
   __LINE__, __FILE__, errno, strerror(errno)); exit(1); } while(0)
  
-#define MAP_SIZE 4096UL
-#define MAP_MASK (MAP_SIZE - 1)
 
 static inline void *fixup_addr(void *addr, size_t size);
 
@@ -66,6 +64,8 @@ int main(int argc, char **argv) {
 	int access_type = 'w';
 	char fmt_str[128];
 	size_t data_size;
+	unsigned long MAP_SIZE = sysconf(_SC_PAGE_SIZE);
+	unsigned long MAP_MASK = (MAP_SIZE - 1);
 	
 	if(argc < 2) {
 		fprintf(stderr, "\nUsage:\t%s { address } [ type [ data ] ]\n"
